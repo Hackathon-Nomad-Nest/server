@@ -80,8 +80,31 @@ const addOrRemoveAnActivity = async (req) => {
   return updatedPlan;
 };
 
+const updateMembers = async(req) => {
+  let updateParams;
+  if(addedMember)
+    updateParams = {
+        $push: {
+          users: req.body.addedMember
+        }
+      };
+  else 
+    updateParams = {
+      $pull: {
+        users: req.body.deletedMember
+      }
+    };
+
+  return await dbService.updateOne({
+    model: ItineraryPlan,
+    filter: { _id: planId },
+    updateParams,
+  });
+}
+
 module.exports = {
   createPlan,
   getPlanById,
   addOrRemoveAnActivity,
+  updateMembers,
 };

@@ -40,8 +40,16 @@ const addOrRemoveAnActivity = {
   }),
 };
 
+const updateMembers = {
+  body: Joi.object().keys({
+    addedMember: Joi.string().custom(objectId),
+    deletedMember: Joi.string().custom(objectId),
+  })
+}
+
 module.exports = {
   createPlan,
   getPlanById,
   addOrRemoveAnActivity,
+  updateMembers,
 };
