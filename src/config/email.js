@@ -9,7 +9,7 @@ Thank you for your patience.
 
 Best regards,
 Your Support Team`,
-    subject: 'New Support Ticket Opened',
+    subject: 'Your Query Has Been Registered',
 };
 
 const ticketOpenedMailForDevs = {
@@ -19,7 +19,7 @@ A new support ticket has been opened. Please check the ticket for further detail
 
 Thank you,
 Support Team`,
-    subject: 'Your Query Has Been Registered',
+    subject: 'New Support Ticket Opened',
 };
 
 module.exports = {
