@@ -1,0 +1,1 @@
+module.exports.planValidation = require('./plan.validation');

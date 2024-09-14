@@ -22,7 +22,8 @@ const errorMessages = {
   UNAUTHORIZED: 'User not authorized for this action',
   FAILED_TO_SET_PASSWORD: 'Please retry after re-entering your password.',
   FAILED_TO_SEND_MAIL: 'Failed to send mail.',
-  SAME_RECORD_IS_BEIGN_UPDATED: 'Same record is being updated'
+  SAME_RECORD_IS_BEIGN_UPDATED: 'Same record is being updated',
+  SOMETHING_WENT_WRONG: 'Something went wrong.',
 };
 module.exports = {
   errorMessages,
