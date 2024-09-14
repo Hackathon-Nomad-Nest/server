@@ -11,9 +11,20 @@ const userSchema = mongoose.Schema({
   },
   name: {
     type: String,
-    required: true,
     trim: true,
   },
+  picture: {
+    type: String,
+    trim: true,
+  },
+  givenName: {
+    type: String,
+    trim: true,
+  },
+  familyName:{
+    type: String,
+    trim: true,
+  }
 });
 
 // add plugin that converts mongoose to json
