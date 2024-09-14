@@ -4,12 +4,10 @@ const xss = require('xss-clean');
 const mongoSanitize = require('express-mongo-sanitize');
 const compression = require('compression');
 const cors = require('cors');
-const passport = require('passport');
 const httpStatus = require('http-status');
 const cookieParser = require('cookie-parser');
 const http = require('http');
 const config = require('./config/config');
-const { jwtStrategy } = require('./config/passport');
 const { authLimiter } = require('./middlewares/rateLimiter');
 const routes = require('./routes/v1');
 const ApiError = require('./utils/ApiError');
@@ -42,8 +40,6 @@ app.use(compression());
 
 // Initialize Passport and use JWT strategy
 app.use(cookieParser());
-app.use(passport.initialize());
-passport.use('jwt', jwtStrategy);
 
 // Apply rate limiter for authentication routes only
 if (!config.socket) {
