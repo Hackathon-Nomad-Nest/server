@@ -21,6 +21,7 @@ const errorMessages = {
   PLEASE_AUTHENTICATE: 'Please authenticate',
   UNAUTHORIZED: 'User not authorized for this action',
   FAILED_TO_SET_PASSWORD: 'Please retry after re-entering your password.',
+  SAME_RECORD_IS_BEIGN_UPDATED: 'Same record is being updated'
 };
 module.exports = {
   errorMessages,
