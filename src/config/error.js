@@ -21,6 +21,7 @@ const errorMessages = {
   PLEASE_AUTHENTICATE: 'Please authenticate',
   UNAUTHORIZED: 'User not authorized for this action',
   FAILED_TO_SET_PASSWORD: 'Please retry after re-entering your password.',
+  FAILED_TO_SEND_MAIL: 'Failed to send mail.',
 };
 module.exports = {
   errorMessages,
