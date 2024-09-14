@@ -8,4 +8,5 @@ const router = express.Router();
 
 router.route('/').post(validate(planValidation.createPlan), planController.createPlan);
 router.route('/:planId').get(validate(planValidation.getPlanById), planController.getPlan);
+router.route('/:planId').put(validate(planValidation.addOrRemoveAnActivity), planController.addOrRemoveAnActivity);
 module.exports = router;

@@ -16,13 +16,14 @@ const getPlan = catchAsync(async (req, res) => {
     }
     res.status(httpStatus.OK).send(plan);
   });
-const updatePlan = catchAsync(async (req, res) => {
-  const user = await planService.createPlan(req.body, req.user);
-  res.status(httpStatus.OK).send(user);
+
+const addOrRemoveAnActivity = catchAsync(async (req, res) => {
+  const updatedPlan = await planService.addOrRemoveAnActivity(req);
+  res.status(httpStatus.OK).send(updatedPlan);
 });
 
 module.exports = {
   createPlan,
   getPlan,
-  updatePlan,
+  addOrRemoveAnActivity,
 };

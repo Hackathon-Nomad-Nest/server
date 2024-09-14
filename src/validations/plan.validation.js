@@ -26,7 +26,14 @@ const getPlanById = {
   }),
 };
 
+const addOrRemoveAnActivity = {
+    params: Joi.object().keys({
+      planId: Joi.string().custom(objectId),
+    }),
+  };
+
 module.exports = {
   createPlan,
   getPlanById,
+  addOrRemoveAnActivity
 };
