@@ -20,7 +20,28 @@ const getPlanById = async (reqParams) => {
   });
   return plan;
 };
+
+/**
+ * Update a itineraryPlan record by its code.
+ * @async
+ * @function
+ * @param {string} code - The itineraryPlan code to update.
+ * @param {Object} reqBody - The request body containing the updated itineraryPlan data.
+ * @returns {Promise<Object>} - The updated itineraryPlan record.
+ */
+const addOrRemoveAnActivity = async (req) => {
+  const { body, params } = req;
+  const { planId } = params || {};
+  const updatedPlan = await dbService.updateOne({
+    model: ItineraryPlan,
+    filter: { _id: planId },
+    updateParams: { ...body },
+  });
+  return updatedPlan;
+};
+
 module.exports = {
   createPlan,
   getPlanById,
+  addOrRemoveAnActivity
 };
