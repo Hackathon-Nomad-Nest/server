@@ -18,6 +18,8 @@ const envVarsSchema = Joi.object()
     OPEN_AI_URL: Joi.string(),
     OPEN_AI_KEY: Joi.string(),
     OPEN_AI_HOST: Joi.string(),
+    PEXELS_KEY: Joi.string(),
+    PEXELS_URL: Joi.string(),
   })
   .unknown();
 
@@ -64,6 +66,10 @@ module.exports = {
     url: envVars.OPEN_AI_URL,
     key: envVars.OPEN_AI_KEY,
     host: envVars.OPEN_AI_HOST,
+  },
+  pexels: {
+    url: envVars.PEXELS_URL,
+    key: envVars.PEXELS_KEY,
   },
   staticPath: envVars.STATIC_PATH || 'temp',
   socketURL: envVars.SOCKET_URL,

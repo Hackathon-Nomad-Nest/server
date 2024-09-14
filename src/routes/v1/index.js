@@ -2,6 +2,7 @@ const express = require('express');
 const userRoute = require('./user.route');
 const authRoute = require('./auth.route');
 const planRoute = require('./plan.route');
+const imagesRoute = require('./images.route');
 
 
 
@@ -19,6 +20,10 @@ const defaultRoutes = [
   {
     path: '/itinerary-plan',
     route: planRoute,
+  },
+  {
+    path: '/images',
+    route: imagesRoute,
   }
 ];
 
