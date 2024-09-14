@@ -16,7 +16,7 @@ const createPlan = {
         preferredTravelMode: Joi.string(), // Preferred travel mode
       })
       .required(),
-    user: Joi.string().allow(''),
+    user: Joi.string().allow('').required(),
   }),
 };
 
@@ -27,13 +27,21 @@ const getPlanById = {
 };
 
 const addOrRemoveAnActivity = {
-    params: Joi.object().keys({
-      planId: Joi.string().custom(objectId),
-    }),
-  };
+  params: Joi.object().keys({
+    planId: Joi.string().custom(objectId),
+  }),
+  query: Joi.object().keys({
+    action: Joi.string(),
+  }),
+  body: Joi.object().keys({
+    keyName: Joi.string().required(),
+    day: Joi.string().required(),
+    newValue: Joi.string(),
+  }),
+};
 
 module.exports = {
   createPlan,
   getPlanById,
-  addOrRemoveAnActivity
+  addOrRemoveAnActivity,
 };
