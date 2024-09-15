@@ -36,7 +36,7 @@ const getPlans = catchAsync(async (req , res) => {
     req,
     allowedFilters: ['user'],
     select: {
-      _current: { budget: 1, adults: 1, kids: 1, numberOfDays: 1, to: 1, from: 1 },
+      _current: { budget: 1, adults: 1, kids: 1, numberOfDays: 1, to: 1, from: 1, travelInput: 1 },
     },
   });
   res.status(httpStatus.OK).send(plans);
