@@ -27,9 +27,16 @@ const updateMembers = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(updatePlan);
 })
 
+const getTipsAndMusic = catchAsync(async (req, res) => {
+  const plan = await planService.getTipsAndMusic(req.body);
+  res.status(httpStatus.CREATED).send({ plan });
+});
+
 module.exports = {
   createPlan,
   getPlan,
   addOrRemoveAnActivity,
   updateMembers,
+  getPlans,
+  getTipsAndMusic,
 };
