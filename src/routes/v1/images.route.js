@@ -5,6 +5,6 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(imagesController.fetchImages);
+  .get(imagesController.fetchImages);
 
 module.exports = router;
