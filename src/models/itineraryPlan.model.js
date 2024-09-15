@@ -28,6 +28,9 @@ const ItineraryPlanSchema = mongoose.Schema({
   budget: {
     type: String,
   },
+  createdAt: {
+    type: Date,
+  },
 });
 
 // add plugin that converts mongoose to json
@@ -37,6 +40,7 @@ ItineraryPlanSchema.plugin(paginate);
 /**
  * @typedef Itinerary
  */
+ItineraryPlanSchema.index({ createdAt: 1 }, { expireAfterSeconds: 2592000 });
 
 const Itinerary = mongoose.model(models.ITINERARY_PLAN, ItineraryPlanSchema);
 

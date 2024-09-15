@@ -18,6 +18,7 @@ const createPlan = async (body) => {
       to: travelInput.to,
       from: travelInput.from,
       budget: travelInput.budget,
+      createdAt: new Date().toISOString(),
     };
   await dbService.createOne({ model: ItineraryPlan, reqParams: planBody });
   return itineraryPlan;
