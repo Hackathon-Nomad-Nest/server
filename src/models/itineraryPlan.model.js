@@ -10,6 +10,24 @@ const ItineraryPlanSchema = mongoose.Schema({
   response: {
     type: mongoose.SchemaTypes.Mixed,
   },
+  adults: {
+    type: String,
+  },
+  kids: {
+    type: String,
+  },
+  numberOfDays: {
+    type: String,
+  },
+  to: {
+    type: String,
+  },
+  from: {
+    type: String,
+  },
+  budget: {
+    type: String,
+  },
 });
 
 // add plugin that converts mongoose to json
