@@ -4,6 +4,7 @@ const { ItineraryPlan } = require('../models');
 const httpStatus = require('http-status');
 const { errorMessages } = require('../config/error');
 const ApiError = require('../utils/ApiError');
+const generateTipsAndMusic = require('../utils/openAi/generateTipsAndMusic');
 
 const createPlan = async (body) => {
   const { travelInput, user } = body;
@@ -103,9 +104,16 @@ const updateMembers = async(req) => {
   });
 }
 
+const getTipsAndMusic = async (body) => {
+  const { travelInput } = body;
+  const tipsAndMusic = await generateTipsAndMusic(travelInput);
+  return tipsAndMusic;
+};
+
 module.exports = {
   createPlan,
   getPlanById,
   addOrRemoveAnActivity,
   updateMembers,
+  getTipsAndMusic
 };

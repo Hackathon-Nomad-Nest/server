@@ -10,6 +10,7 @@ router
   .route('/')
   .post(validate(planValidation.createPlan), planController.createPlan)
   .get(validate(planValidation.getPlans), planController.getPlans);
+router.route('/tips-and-music').post(validate(planValidation.getTipsAndMusic), planController.getTipsAndMusic);
 router.route('/:planId').get(validate(planValidation.getPlanById), planController.getPlan);
 router.route('/:planId').put(validate(planValidation.addOrRemoveAnActivity), planController.addOrRemoveAnActivity);
 router.route('/updateMembers/:planId').put(validate(planValidation.updateMembers) , planController.updateMembers);
