@@ -9,8 +9,8 @@ const loginUser = catchAsync(async (req, res) => {
     familyName: family_name,
     ...rest,
   }
-  await userService.storeNewUser(body);
-  res.status(httpStatus.OK).send({message: 'Ok'});
+  const user = await userService.storeNewUser(body);
+  res.status(httpStatus.OK).send({user});
 });
 
 module.exports = {

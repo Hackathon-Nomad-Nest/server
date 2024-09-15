@@ -1,4 +1,4 @@
-const generateItineraryPlan = require('../utils/openAi/generateItineraryPlan');
+const {generateItineraryPlan, updateItineraryPlan , } = require('../utils/openAi/generateItineraryPlan');
 const dbService = require('../services/db.service');
 const { ItineraryPlan } = require('../models');
 const httpStatus = require('http-status');
@@ -19,16 +19,42 @@ const createPlan = async (body) => {
       from: travelInput.from,
       budget: travelInput.budget,
       createdAt: new Date().toISOString(),
+      travelInput
     };
   const doc = await dbService.createOne({ model: ItineraryPlan, reqParams: planBody });
   return doc;
 };
 
+const updatePlan = async (req) => {
+  const { params , body} = req;
+  const { planId = '' } = params || {};
+  const {currentDay , travelInput, currentLocation} = body || {};
+  const plan = await dbService.getOne({
+    model: ItineraryPlan,
+    filter: { _id: planId },
+  }); 
+  const prevObj = {
+    prevTravelInput: plan.travelInput,
+    remainingTrip: plan.response,
+  }
+  const response = await updateItineraryPlan({currentDay, travelInput, currentLocation , ...prevObj});
+  await dbService.updateOne({
+    model: ItineraryPlan,
+    filter:{
+      _id: planId
+    },
+    reqParams:{
+      response,
+      travelInput
+    }
+  })
+  return response;
+}
+
 const getPlanById = async (reqParams) => {
   const { params } = reqParams;
   const { planId = '' } = params || {};
   const filter = { _id: planId };
-  console.log("🚀 ~ getPlanById ~ planId:", planId)
   const plan = await dbService.getOne({
     model: ItineraryPlan,
     filter,
@@ -116,5 +142,6 @@ module.exports = {
   getPlanById,
   addOrRemoveAnActivity,
   updateMembers,
-  getTipsAndMusic
+  getTipsAndMusic,
+  updatePlan,
 };

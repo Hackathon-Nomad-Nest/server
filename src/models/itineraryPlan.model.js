@@ -31,6 +31,9 @@ const ItineraryPlanSchema = mongoose.Schema({
   createdAt: {
     type: Date,
   },
+  travelInput: {
+    type: Object,
+  }
 });
 
 // add plugin that converts mongoose to json

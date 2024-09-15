@@ -13,28 +13,39 @@ const headers = {
 };
 
 const cleanResponse = (response) => {
-    try {
-      let messageContent = response.choices[0].message.content;
-      
-      // Remove surrounding markdown if present
-      if (messageContent.startsWith('```json')) {
-        messageContent = messageContent.slice(7).trim();
-      }
-      if (messageContent.endsWith('```')) {
-        messageContent = messageContent.slice(0, -3).trim();
-      }
-      
-      // Parse JSON and handle undefined values
-      const parsedContent = JSON.parse(messageContent);
-      return JSON.parse(JSON.stringify(parsedContent), (key, value) => value === 'undefined' ? null : value);
-    } catch (error) {
-        throw new ApiError(httpStatus.NO_CONTENT, errorMessages.INVALID('Response'));
+  try {
+    let messageContent = response.choices[0].message.content;
+
+    // Remove surrounding markdown if present
+    if (messageContent.startsWith('```json')) {
+      messageContent = messageContent.slice(7).trim();
     }
-  };
+    if (messageContent.endsWith('```')) {
+      messageContent = messageContent.slice(0, -3).trim();
+    }
+
+    // Parse JSON and handle undefined values
+    const parsedContent = JSON.parse(messageContent);
+    return JSON.parse(JSON.stringify(parsedContent), (key, value) => (value === 'undefined' ? null : value));
+  } catch (error) {
+    throw new ApiError(httpStatus.NO_CONTENT, errorMessages.INVALID('Response'));
+  }
+};
 
 // Function to send the planPrompt and handle the response
 const generateItineraryPlan = async (travelInput) => {
-  const { from, to, numberOfDays = 3, budget, adults, kids = 0, pet = 0, tripType, startDate, preferredTravelMode = 'bus' } = travelInput;
+  const {
+    from,
+    to,
+    numberOfDays = 3,
+    budget,
+    adults,
+    kids = 0,
+    pet = 0,
+    tripType,
+    startDate,
+    preferredTravelMode = 'bus',
+  } = travelInput;
   try {
     const response = await axios.post(
       apiUrl,
@@ -284,11 +295,99 @@ const generateItineraryPlan = async (travelInput) => {
       { headers }
     );
     const cleanedResponse = cleanResponse(response.data);
-    
+
     return cleanedResponse;
   } catch (error) {
+    console.log('🚀 ~ error:', error);
     throw new ApiError(httpStatus.EXPECTATION_FAILED, error.data.message || error);
   }
 };
 
-module.exports = generateItineraryPlan;
+// Function to update the remaining itinerary plan with the user's current location
+const updateItineraryPlan = async ({ currentDay, prevTravelInput, travelInput, remainingTrip, currentLocation }) => {
+  const {
+    from: prev_from = 'unknown',
+    to: prev_to = 'unknown',
+    numberOfDays: prev_numberOfDays = 3,
+    budget: prev_budget = 0,
+    adults: prev_adults = 0,
+    kids: prev_kids = 0,
+    pet: prev_pet = 0,
+    remainingDays: prev_tripType = 'unknown',
+    startDate: prev_startDate = 'unknown',
+    preferredTravelMode: prev_preferredTravelMode = 'bus',
+  } = prevTravelInput;
+
+  const {
+    from = prev_from,
+    to = prev_to,
+    numberOfDays = prev_numberOfDays,
+    budget = prev_budget,
+    adults = prev_adults,
+    kids = prev_kids,
+    pet = prev_pet,
+    remainingDays = numberOfDays - currentDay, // Default calculation based on number of days
+    tripType = prev_tripType,
+    preferredTravelMode = prev_preferredTravelMode,
+  } = travelInput;
+
+  if (remainingDays <= 0) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'No remaining days to update.');
+  }
+
+  // Define the current location to start the update from
+  const { current_latitude, current_longitude } = currentLocation;
+
+  try {
+    const response = await axios.post(
+      apiUrl,
+      {
+        messages: [
+          {
+            role: 'user',
+            content: `
+               I was going on a trip from ${prev_from} to ${prev_to} for ${prev_numberOfDays} days starting from ${prev_startDate} by ${prev_preferredTravelMode}, my budget was ${prev_budget}, we were ${prev_adults} adults, and ${prev_kids} kids, and ${prev_pet} pet, and we wanted to experience the ${prev_tripType} there. We had a detailed travel plan and a list of essentials to carry which included details about transportation, accommodation, restaurants, and weather. It also had the best conveyance in my budget and kept the plan under my budget.
+
+Now, currently on day ${currentDay} of my trip, and my current location is at latitude ${current_latitude}, longitude ${current_longitude}.
+
+I want to update my plan for the remaining ${remainingDays} days. My new trip inputs are:
+
+Updated from: ${from}
+Updated to: ${to}
+Updated budget: ${budget}
+Updated number of days: ${numberOfDays}
+Now traveling with ${adults} adults, ${kids} kids, and ${pet} pet.
+Updated trip type: ${tripType}
+Preferred travel mode: ${preferredTravelMode}
+Please provide a new similar detailed plan starting from my current location and considering my updated details and the amount I have already spent in past days and places I have visited and activities that I have done. Provide updated details about transportation, accommodation, best conveyance, and activities that fit within my updated budget.
+
+Only return the updatedPlan data from the JSON response without any additional text before or after the JSON object. Ensure the JSON pattern follows the exact structure provided. Here is my initial plan:
+
+${JSON.stringify(remainingTrip, null, 2)}
+  `,
+          },
+        ],
+        model: 'gpt-4o',
+        max_tokens: 4094,
+        temperature: 0.9,
+      },
+      { headers }
+    );
+
+    const cleanedResponse = cleanResponse(response.data);
+
+    // Merge the new plan with the previous plan, excluding completed days
+    return {
+      ...remainingTrip,
+      updatedPlan: cleanedResponse,
+    };
+  } catch (error) {
+    console.log('🚀 ~ updateItineraryPlan ~ error:', error);
+    throw new ApiError(httpStatus.EXPECTATION_FAILED, error.data?.message || error);
+  }
+};
+
+module.exports = {
+  updateItineraryPlan,
+  generateItineraryPlan,
+};
