@@ -47,6 +47,10 @@ const getTipsAndMusic = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send({ plan });
 });
 
+const updatePlanOnGo = catchAsync(async(req , res) => {
+  const updatedPlan = await planService.updatePlan(req);
+  res.status(httpStatus.OK).send(updatedPlan);
+})
 module.exports = {
   createPlan,
   getPlan,
@@ -54,4 +58,5 @@ module.exports = {
   updateMembers,
   getPlans,
   getTipsAndMusic,
+  updatePlanOnGo,
 };

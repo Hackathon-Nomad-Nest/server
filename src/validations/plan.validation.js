@@ -68,6 +68,32 @@ const getTipsAndMusic = {
     .required(),
 };
 
+const updatePlanOnGo = {
+  params: Joi.object().keys({
+    planId: Joi.string().custom(objectId),
+  }),
+  body: Joi.object().keys({
+    travelInput: Joi.object()
+      .keys({
+        to: Joi.string(),
+        from: Joi.string(), 
+        budget: Joi.string(), 
+        startDate: Joi.string(), 
+        adults: Joi.number().integer().min(1), 
+        kids: Joi.number(), 
+        numberOfDays: Joi.number().integer().min(1), 
+        tripType: Joi.string(),
+        preferredTravelMode: Joi.string(), 
+      })
+      .required(),
+    currentDay : Joi.number(), 
+    currentLocation: Joi.object()
+      .keys({
+        current_latitude: Joi.string(), 
+        current_longitude:Joi.string()
+      })
+  }),
+};
 module.exports = {
   createPlan,
   getPlanById,
@@ -75,4 +101,5 @@ module.exports = {
   updateMembers,
   getPlans,
   getTipsAndMusic,
+  updatePlanOnGo,
 };

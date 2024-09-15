@@ -9,13 +9,14 @@ const storeNewUser = async (userBody) => {
     },
   });
   if (!user) {
-    await dbService.createOne({
+    return await dbService.createOne({
       model: User,
       reqParams: {
         ...userBody,
       },
     });
   }
+  return user;
 };
 
 module.exports = {
