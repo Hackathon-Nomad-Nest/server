@@ -1,7 +1,6 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const fetchPhotos = require('../utils/pexels/getImagesFromPexel');
-const { result } = require('lodash');
 
 const fetchImages = catchAsync(async (req, res) => {
   const photos = await fetchPhotos(req.query.queries);
