@@ -20,14 +20,15 @@ const createPlan = async (body) => {
       budget: travelInput.budget,
       createdAt: new Date().toISOString(),
     };
-  await dbService.createOne({ model: ItineraryPlan, reqParams: planBody });
-  return itineraryPlan;
+  const doc = await dbService.createOne({ model: ItineraryPlan, reqParams: planBody });
+  return doc;
 };
 
 const getPlanById = async (reqParams) => {
   const { params } = reqParams;
   const { planId = '' } = params || {};
   const filter = { _id: planId };
+  console.log("🚀 ~ getPlanById ~ planId:", planId)
   const plan = await dbService.getOne({
     model: ItineraryPlan,
     filter,
