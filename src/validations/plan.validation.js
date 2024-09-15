@@ -46,10 +46,19 @@ const updateMembers = {
     deletedMember: Joi.string().custom(objectId),
   })
 }
+const getPlans = {
+    query: Joi.object().keys({
+      user: Joi.string().custom(objectId),
+      sortBy: Joi.string(),
+      limit: Joi.number().integer(),
+      page: Joi.number().integer(),
+    }),
+  };
 
 module.exports = {
   createPlan,
   getPlanById,
   addOrRemoveAnActivity,
   updateMembers,
+  getPlans
 };

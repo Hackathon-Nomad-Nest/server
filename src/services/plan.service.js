@@ -8,7 +8,16 @@ const ApiError = require('../utils/ApiError');
 const createPlan = async (body) => {
   const { travelInput, user } = body;
   const itineraryPlan = await generateItineraryPlan(travelInput);
-  const planBody = { response: itineraryPlan, user };
+    const planBody = {
+      response: itineraryPlan,
+      user,
+      adults: travelInput.adults || 0,
+      kids: travelInput.kids || 0,
+      numberOfDays: travelInput.numberOfDays,
+      to: travelInput.to,
+      from: travelInput.from,
+      budget: travelInput.budget,
+    };
   await dbService.createOne({ model: ItineraryPlan, reqParams: planBody });
   return itineraryPlan;
 };
@@ -24,14 +33,6 @@ const getPlanById = async (reqParams) => {
   return plan;
 };
 
-/**
- * Update a itineraryPlan record by its code.
- * @async
- * @function
- * @param {string} code - The itineraryPlan code to update.
- * @param {Object} reqBody - The request body containing the updated itineraryPlan data.
- * @returns {Promise<Object>} - The updated itineraryPlan record.
- */
 const addOrRemoveAnActivity = async (req) => {
   const { body, params, query } = req;
   const { planId } = params || {};
