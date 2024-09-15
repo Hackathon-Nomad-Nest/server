@@ -10,6 +10,9 @@ const ItineraryPlanSchema = mongoose.Schema({
   response: {
     type: mongoose.SchemaTypes.Mixed,
   },
+  travelInput: {
+    type: Object,
+  }
 });
 
 // add plugin that converts mongoose to json

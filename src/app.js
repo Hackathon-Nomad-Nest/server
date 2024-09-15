@@ -17,7 +17,14 @@ const app = express();
 
 // Set security HTTP headers
 app.use(helmet());
-app.use(cors({ origin: '*' })); 
+// app.use(cors({ origin: '*' })); 
+const corsOptions = {
+  origin: '*', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+  credentials: true,  
+};
+
+app.use(cors(corsOptions));
 
 // Expose headers
 app.use((req, res, next) => {

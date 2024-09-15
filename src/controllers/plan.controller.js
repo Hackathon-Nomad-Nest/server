@@ -22,8 +22,13 @@ const addOrRemoveAnActivity = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(updatedPlan);
 });
 
+const updatePlanOnGo = catchAsync(async(req , res) => {
+  const updatedPlan = await planService.updatePlan(req);
+  res.status(httpStatus.OK).send(updatedPlan);
+})
 module.exports = {
   createPlan,
   getPlan,
   addOrRemoveAnActivity,
+  updatePlanOnGo,
 };

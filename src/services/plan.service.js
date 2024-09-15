@@ -1,4 +1,4 @@
-const generateItineraryPlan = require('../utils/openAi/generateItineraryPlan');
+const {generateItineraryPlan, updateItineraryPlan , } = require('../utils/openAi/generateItineraryPlan');
 const dbService = require('../services/db.service');
 const { ItineraryPlan } = require('../models');
 const httpStatus = require('http-status');
@@ -8,10 +8,36 @@ const ApiError = require('../utils/ApiError');
 const createPlan = async (body) => {
   const { travelInput, user } = body;
   const itineraryPlan = await generateItineraryPlan(travelInput);
-  const planBody = { response: itineraryPlan, user };
+  const planBody = { response: itineraryPlan, user, travelInput};
   await dbService.createOne({ model: ItineraryPlan, reqParams: planBody });
   return itineraryPlan;
 };
+
+const updatePlan = async (req) => {
+  const { params , body} = req;
+  const { planId = '' } = params || {};
+  const {currentDay , travelInput, currentLocation} = body || {};
+  const plan = await dbService.getOne({
+    model: ItineraryPlan,
+    filter: { _id: planId },
+  }); 
+  const prevObj = {
+    prevTravelInput: plan.travelInput,
+    remainingTrip: plan.response,
+  }
+  const response = await updateItineraryPlan({currentDay, travelInput, currentLocation , ...prevObj});
+  await dbService.updateOne({
+    model: ItineraryPlan,
+    filter:{
+      _id: planId
+    },
+    reqParams:{
+      response,
+      travelInput
+    }
+  })
+  return response;
+}
 
 const getPlanById = async (reqParams) => {
   const { params } = reqParams;
@@ -84,4 +110,5 @@ module.exports = {
   createPlan,
   getPlanById,
   addOrRemoveAnActivity,
+  updatePlan,
 };
