@@ -105,8 +105,7 @@ const updateMembers = async(req) => {
 }
 
 const getTipsAndMusic = async (body) => {
-  const { travelInput } = body;
-  const tipsAndMusic = await generateTipsAndMusic(travelInput);
+  const tipsAndMusic = await generateTipsAndMusic(body);
   return tipsAndMusic;
 };
 

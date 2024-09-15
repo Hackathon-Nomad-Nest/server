@@ -34,12 +34,9 @@ const generateTipsAndMusic = async (travelInput) => {
   const {
     from,
     to,
-    numberOfDays = 3,
-    budget,
-    adults,
-    kids = 0,
     tripType,
     startDate,
+    endDate,
     preferredTravelMode = 'bus',
   } = travelInput;
 
@@ -51,7 +48,7 @@ const generateTipsAndMusic = async (travelInput) => {
           {
             role: 'user',
             content: `
-              I am going on a trip from ${from} to ${to} for ${numberOfDays} days starting from ${startDate} by ${preferredTravelMode}, my budget is ${budget}, we are ${adults} adults, and ${kids} kids, and our trip type is ${tripType}, suggest me tips for the trip and a list of ten bollywood and ten hollywood songs to listen while traveling. Use the best conveyance in my budget and keep the plan under my budget. Please format the response as follows: 
+              I am going on a trip from ${from} to ${to} starting from ${startDate} to ${endDate} by ${preferredTravelMode}, and our trip type is ${tripType}, suggest me tips for the trip and a list of ten bollywood and ten hollywood songs to listen while traveling. Use the best conveyance in my budget and keep the plan under my budget. Please format the response as follows: 
              {
                 "trip_tips": [
                   "Pack light and carry essentials.",
