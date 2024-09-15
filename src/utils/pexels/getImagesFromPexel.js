@@ -35,14 +35,12 @@ const fetchPhotos = async (queries) => {
 
         if (data && Array.isArray(data.photos)) {
           acc[query] = data.photos.map(photo => ({
-            url: photo.url,
+            url: photo.src.original,
             alt: photo.alt,
           }));
         } else {
           acc[query] = [];
         }
-      } else {
-        // Optionally log or handle errors here if needed
       }
 
       return acc;
